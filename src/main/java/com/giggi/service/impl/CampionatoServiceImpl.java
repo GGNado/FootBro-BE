@@ -55,6 +55,11 @@ public class CampionatoServiceImpl implements CampionatoService {
     }
 
     @Override
+    public List<Campionato> findAllByPartecipazioneCampionatoUtenteId(Long id) {
+        return campionatoRepository.findAllByPartecipazioniUtenteId(id);
+    }
+
+    @Override
     public Campionato findById(Long id) {
         return campionatoRepository.findById(id).orElse(null);
     }

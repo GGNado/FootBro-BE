@@ -1,5 +1,6 @@
 package com.giggi.dto.request.auth;
 
+import com.giggi.entity.enums.RuoliPartita;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -47,4 +48,7 @@ public class RegisterRequest {
 
     @Schema(description = "Set of role names to assign to user", example = "[\"ROLE_USER\"]")
     private Set<String> roles;
+
+    @Schema(description = "Set of preferred game roles for the user", example = "[\"PORTIERE\", \"DIFENSORE\"]")
+    private Set<RuoliPartita> ruoliPreferiti;
 }

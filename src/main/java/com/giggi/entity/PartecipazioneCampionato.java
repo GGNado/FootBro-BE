@@ -52,6 +52,10 @@ public class PartecipazioneCampionato {
 
     @Column(nullable = false)
     @Builder.Default
+    private Integer assist = 0;
+
+    @Column(nullable = false)
+    @Builder.Default
     private Integer golSubiti = 0;
 
     // Metadati

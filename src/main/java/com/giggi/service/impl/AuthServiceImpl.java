@@ -5,7 +5,7 @@ import com.giggi.dto.request.auth.RegisterRequest;
 import com.giggi.dto.response.MessageResponse;
 import com.giggi.dto.response.jwt.JwtResponse;
 import com.giggi.entity.Role;
-import com.giggi.entity.RoleName;
+import com.giggi.entity.enums.RoleName;
 import com.giggi.entity.Utente;
 import com.giggi.mapper.UtenteMapper;
 import com.giggi.repository.RoleRepository;
@@ -96,6 +96,7 @@ public class AuthServiceImpl {
 
         // Create new user account
         Utente user = userMapper.convert(signUpRequest);
+        System.out.println(user.getRuoliPreferiti());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
 

@@ -1,4 +1,4 @@
-package com.giggi.entity;
+package com.giggi.entity.enums;
 
 import lombok.Getter;
 

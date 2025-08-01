@@ -1,5 +1,6 @@
 package com.giggi.entity;
 
+import com.giggi.entity.enums.RuoliPartita;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -65,6 +66,11 @@ public class Utente {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @ElementCollection(targetClass = RuoliPartita.class, fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ruolo_preferito")
+    private Set<RuoliPartita> ruoliPreferiti = new HashSet<>();
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

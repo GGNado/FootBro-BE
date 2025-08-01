@@ -1,6 +1,7 @@
 package com.giggi.exception;
 
 import com.giggi.exception.campionato.CampionatoNotFoundException;
+import com.giggi.exception.user.UserNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CampionatoNotFoundException.class)
-    public ResponseEntity<String> handleCampionatoNotFound(CampionatoNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    public ResponseEntity<Object> handleCampionatoNotFound(CampionatoNotFoundException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Not Found");
+        body.put("message", ex.getMessage());
+        body.put("path", "/api/campionati");
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
 }

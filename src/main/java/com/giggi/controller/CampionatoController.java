@@ -26,6 +26,14 @@ public class CampionatoController {
                 );
     }
 
+    @GetMapping("/iscritto/{idUtente}")
+    public ResponseEntity<CampionatoFindAllDTO> getCampionatiByUtenteId(@PathVariable Long idUtente) {
+        return ResponseEntity.ok(
+                new CampionatoFindAllDTO(
+                        campionatoMapper.convert(campionatoService.findAllByPartecipazioneCampionatoUtenteId(idUtente)))
+                );
+    }
+
     @PostMapping
     public ResponseEntity<CampionatoFindDTO> createCampionato(
             @RequestBody CampionatoCreateRequestDTO campionatoCreateRequestDTO) {

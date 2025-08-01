@@ -7,6 +7,7 @@ import com.giggi.dto.response.utente.UtenteFindDTO;
 import com.giggi.dto.response.utente.UtenteFindDTOSmall;
 import com.giggi.entity.Role;
 import com.giggi.entity.Utente;
+import com.giggi.entity.enums.RuoliPartita;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -38,6 +39,20 @@ public interface UtenteMapper {
                     role.setName(roleName);
                     return role;
                 })
+                .collect(Collectors.toSet());
+    }
+
+    default Set<RuoliPartita> mapRuoliPreferiti(Set<String> value) {
+        if (value == null) return null;
+        return value.stream()
+                .map(RuoliPartita::valueOf)
+                .collect(Collectors.toSet());
+    }
+
+    default Set<String> mapRuoliPreferitiToString(Set<RuoliPartita> value) {
+        if (value == null) return null;
+        return value.stream()
+                .map(RuoliPartita::name)
                 .collect(Collectors.toSet());
     }
 

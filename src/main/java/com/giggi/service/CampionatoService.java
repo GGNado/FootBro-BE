@@ -15,6 +15,8 @@ public interface CampionatoService {
 
     List<Campionato> findAll();
 
+    List<Campionato> findAllByPartecipazioneCampionatoUtenteId(Long id);
+
     Campionato findById(Long id);
 
     Campionato joinCampionato(CampionatoJoinRequestDTO campionatoJoinRequestDTO);
