@@ -1,5 +1,6 @@
 package com.giggi.entity;
 
+import com.giggi.entity.enums.TipologiaCampionato;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -29,6 +30,10 @@ public class Campionato {
     @Column(nullable = false)
     private String descrizione;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipologiaCampionato tipologiaCampionato;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "creatore_id", nullable = false)
     private Utente creatore;
@@ -38,6 +43,9 @@ public class Campionato {
 
     @OneToMany(mappedBy = "campionato", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PartecipazioneCampionato> partecipazioni = new HashSet<>();
+
+    @OneToMany(mappedBy = "campionato", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Partita> partite = new HashSet<>();
 
     // Metodi di utilità per gestire le partecipazioni
     public void aggiungiPartecipante(Utente utente) {

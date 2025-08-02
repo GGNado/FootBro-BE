@@ -25,8 +25,8 @@ public interface UtenteMapper {
 
     Utente convert(UtenteFindDTO dto);
 
-    UtenteFindDTOSmall convert(Utente entity);
-    UtenteFindDTO conver(Utente entity);
+    UtenteFindDTOSmall convertSmall(Utente entity);
+    UtenteFindDTO convert(Utente entity);
 
     List<UtenteFindDTO> convert(List<Utente> entities);
 

@@ -1,4 +1,4 @@
-package com.giggi.dto.request.PartecipazioneCampionato;
+package com.giggi.dto.request.partecipazioneCampionato;
 
 import lombok.Getter;
 import lombok.Setter;

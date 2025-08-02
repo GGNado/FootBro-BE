@@ -27,8 +27,8 @@ public class Swagger {
                 )
                 .info(
                         new Info()
-                                .title("API BaseSetup")
-                                .description("Descrizione del servizio API per la gestione di base setup")
+                                .title("Footbro API")
+                                .description("API per la gestione di campionati e partite di calcio amatoriale")
                                 .version("1.0")
                                 .contact(
                                         new Contact()

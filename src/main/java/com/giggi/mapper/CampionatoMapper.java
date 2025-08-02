@@ -1,5 +1,6 @@
 package com.giggi.mapper;
 
+import com.giggi.entity.enums.TipologiaCampionato;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,4 +22,9 @@ public interface CampionatoMapper {
     CampionatoFindDTO convert(Campionato entity);
 
     List<CampionatoFindDTO> convert(List<Campionato> entities);
+
+    default String mapTipologiaCampionato(TipologiaCampionato tipologia) {
+        return tipologia != null ? tipologia.name() : null;
+    }
+
 }

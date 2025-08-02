@@ -79,6 +79,9 @@ public class Utente {
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PartecipazioneCampionato> partecipazioni = new HashSet<>();
 
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<PartecipazionePartita> partecipazioniPartite = new HashSet<>();
+
     @OneToMany(mappedBy = "creatore", fetch = FetchType.LAZY)
     private Set<Campionato> campionatiCreati = new HashSet<>();
 
