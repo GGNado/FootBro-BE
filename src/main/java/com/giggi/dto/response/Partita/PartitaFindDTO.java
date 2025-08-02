@@ -1,6 +1,7 @@
 package com.giggi.dto.response.Partita;
 
 import com.giggi.dto.response.PartecipazioneCampionato.PartecipazioneCampionatoFindDTO;
+import com.giggi.entity.PartecipazionePartita;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,6 @@ public class PartitaFindDTO {
     private Long id;
     private String luogo;
     private LocalDateTime dataOra;
-    private Set<PartecipazioneCampionatoFindDTO> partecipazioni;
+    private Set<PartecipazionePartitaFindDTO> partecipazioni;
 
 }

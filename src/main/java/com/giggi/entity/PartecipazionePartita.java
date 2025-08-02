@@ -42,6 +42,10 @@ public class PartecipazionePartita {
     @Builder.Default
     private Integer assist = 0;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Double voto = 0.0;
+
     @Column
     @Builder.Default
     private Boolean presente = true;

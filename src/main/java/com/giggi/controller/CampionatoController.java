@@ -4,6 +4,7 @@ import com.giggi.dto.request.campionato.CampionatoCreateRequestDTO;
 import com.giggi.dto.request.campionato.CampionatoJoinRequestDTO;
 import com.giggi.dto.response.campionato.CampionatoFindAllDTO;
 import com.giggi.dto.response.campionato.CampionatoFindDTO;
+import com.giggi.dto.response.campionato.ClassificaResponse;
 import com.giggi.mapper.CampionatoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -92,6 +93,20 @@ public class CampionatoController {
             @RequestBody CampionatoJoinRequestDTO campionatoJoinRequestDTO) {
         return ResponseEntity.ok(campionatoMapper.convert(
                 campionatoService.joinCampionato(campionatoJoinRequestDTO)));
+    }
+
+    @GetMapping("/{idCampionato}/classifica")
+    @Operation(summary = "Ottieni la classifica di un campionato", description = "Restituisce la classifica del campionato specificato")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Classifica trovata con successo",
+                content = { @Content(mediaType = "application/json",
+                schema = @Schema(implementation = CampionatoFindDTO.class)) }),
+        @ApiResponse(responseCode = "404", description = "Campionato non trovato", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Non autorizzato", content = @Content)
+    })
+    public ResponseEntity<ClassificaResponse> getClassificaByIdCampionato(
+            @Parameter(description = "ID del campionato", required = true) @PathVariable Long idCampionato) {
+        return ResponseEntity.ok(campionatoService.getClassificaByIdCampionato(idCampionato));
     }
 
 }

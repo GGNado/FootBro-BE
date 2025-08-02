@@ -1,5 +1,7 @@
 package com.giggi.mapper;
 
+import com.giggi.entity.enums.Squadra;
+import com.giggi.entity.enums.TipologiaCampionato;
 import org.mapstruct.Mapper;
 
 import java.util.List;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.giggi.dto.request.campionato.CampionatoCreateRequestDTO;
 import com.giggi.dto.request.campionato.CampionatoJoinRequestDTO;
+import com.giggi.dto.response.campionato.ClassificaResponse;
 import com.giggi.entity.Campionato;
 
 public interface CampionatoService {
@@ -20,4 +21,6 @@ public interface CampionatoService {
     Campionato findById(Long id);
 
     Campionato joinCampionato(CampionatoJoinRequestDTO campionatoJoinRequestDTO);
+
+    ClassificaResponse getClassificaByIdCampionato(Long idCampionato);
 }

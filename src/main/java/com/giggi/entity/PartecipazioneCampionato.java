@@ -58,6 +58,10 @@ public class PartecipazioneCampionato {
     @Builder.Default
     private Integer golSubiti = 0;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Double mediaVoto = 0.0;
+
     // Metadati
     @Column(nullable = false)
     private LocalDateTime dataIscrizione;

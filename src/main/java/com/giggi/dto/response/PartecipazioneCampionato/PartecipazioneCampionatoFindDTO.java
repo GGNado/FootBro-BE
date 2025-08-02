@@ -10,7 +10,13 @@ import lombok.Setter;
 @Getter
 public class PartecipazioneCampionatoFindDTO {
     private Long id;
-    private Squadra squadra;
     private UtenteFindDTOSmall utente;
-    // Altri campi
+    private Integer punti;
+    private Integer golFatti;
+    private Integer assist;
+    private Integer partiteGiocate;
+    private Integer partiteVinte;
+    private Integer partitePerse;
+    private Integer partitePareggiate;
+    private Double mediaVoto;
 }
