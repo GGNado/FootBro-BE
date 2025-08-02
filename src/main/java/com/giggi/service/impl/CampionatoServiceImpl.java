@@ -35,7 +35,6 @@ public class CampionatoServiceImpl implements CampionatoService {
         campionato.setPartecipazioni(new HashSet<>());
         campionato.aggiungiPartecipante(creatore);
 
-
         return campionatoRepository.save(campionato);
     }
 

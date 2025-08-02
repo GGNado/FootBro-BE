@@ -46,7 +46,6 @@ public class Campionato {
                 .campionato(this)
                 .build();
         partecipazioni.add(partecipazione);
-        utente.getPartecipazioni().add(partecipazione);
     }
 
     public void rimuoviPartecipante(Utente utente) {
