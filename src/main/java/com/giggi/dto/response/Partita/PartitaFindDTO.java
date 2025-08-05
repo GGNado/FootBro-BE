@@ -15,6 +15,8 @@ public class PartitaFindDTO {
     private Long id;
     private String luogo;
     private LocalDateTime dataOra;
+    private Integer golSquadraB;
+    private Integer golSquadraA;
     private Set<PartecipazionePartitaFindDTO> partecipazioni;
 
 }

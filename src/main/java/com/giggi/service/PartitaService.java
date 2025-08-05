@@ -3,6 +3,7 @@ package com.giggi.service;
 import java.util.List;
 
 import com.giggi.dto.request.partita.PartitaCreateRequestDTO;
+import com.giggi.dto.request.partita.SalvaSquadraRequestDTO;
 import com.giggi.entity.Partita;
 
 public interface PartitaService {
@@ -19,4 +20,6 @@ public interface PartitaService {
     Partita findById(Long id);
 
     Partita iscrivitiPartita(Long idPartita, Long idUtente);
+
+    Partita salvaSquadra(Long idPartita, SalvaSquadraRequestDTO salvaSquadraRequestDTO);
 }

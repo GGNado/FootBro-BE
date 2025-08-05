@@ -1,5 +1,6 @@
 package com.giggi.service.impl;
 
+import com.giggi.dto.request.partita.SalvaSquadraRequestDTO;
 import com.giggi.entity.Campionato;
 import com.giggi.entity.PartecipazionePartita;
 import com.giggi.entity.Utente;
@@ -109,5 +110,23 @@ public class PartitaServiceImpl implements PartitaService {
 
         return partecipazionePartitaRepository.save(partecipazione).getPartita();
 
+    }
+
+    @Override
+    @Transactional
+    public Partita salvaSquadra(Long idPartita, SalvaSquadraRequestDTO salvaSquadraRequestDTO) {
+        Partita partita = partitaRepository.findById(idPartita)
+                .orElseThrow(() -> new PartitaNotFoundException("Partita non trovata con id: " + idPartita));
+
+        Squadra squadra = salvaSquadraRequestDTO.getSquadra();
+
+        for (PartecipazionePartita partecipazione : partita.getPartecipazioni()) {
+            if (salvaSquadraRequestDTO.getIdUtenti().contains(partecipazione.getUtente().getId())) {
+                partecipazione.setSquadra(squadra);
+                partecipazionePartitaRepository.save(partecipazione);
+            }
+        }
+
+        return partita;
     }
 }

@@ -1,6 +1,7 @@
 package com.giggi.controller;
 
 import com.giggi.dto.request.partita.PartitaCreateRequestDTO;
+import com.giggi.dto.request.partita.SalvaSquadraRequestDTO;
 import com.giggi.dto.response.Partita.PartitaFindAllDTO;
 import com.giggi.dto.response.Partita.PartitaFindAllSmallDTO;
 import com.giggi.dto.response.Partita.PartitaFindDTO;
@@ -148,4 +149,27 @@ public class PartitaController {
                 )
         );
     }
+
+    @Operation(summary = "Salva la squadra di una partita",
+              description = "Aggiorna le informazioni della squadra in una partita esistente")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Squadra salvata con successo",
+                content = { @Content(mediaType = "application/json",
+                schema = @Schema(implementation = PartitaFindDTO.class)) }),
+        @ApiResponse(responseCode = "404", description = "Partita non trovata", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Non autorizzato", content = @Content)
+    })
+    @PostMapping("/{idPartita}/salvaSquadra")
+    public ResponseEntity<PartitaFindDTO> salvaSquadra(
+            @Parameter(description = "ID della partita", required = true) @PathVariable Long idPartita,
+            @RequestBody SalvaSquadraRequestDTO salvaSquadraRequestDTO) {
+
+        return ResponseEntity.ok(
+                partitaMapper.convert(
+                        partitaService.salvaSquadra(idPartita, salvaSquadraRequestDTO)
+                )
+        );
+    }
+
+
 }
