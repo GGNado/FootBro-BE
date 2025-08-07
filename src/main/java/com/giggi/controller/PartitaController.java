@@ -150,6 +150,18 @@ public class PartitaController {
         );
     }
 
+    @PostMapping("/{idPartita}/disiscriviti/{idUtente}")
+    public ResponseEntity<PartitaFindDTO> disiscrivitiPartita(
+            @Parameter(description = "ID della partita", required = true) @PathVariable Long idPartita,
+            @Parameter(description = "ID dell'utente da disiscrivere", required = true) @PathVariable Long idUtente
+    ){
+        return ResponseEntity.ok(
+                partitaMapper.convert(
+                        partitaService.disiscrivitiPartita(idPartita, idUtente)
+                )
+        );
+    }
+
     @Operation(summary = "Salva la squadra di una partita",
               description = "Aggiorna le informazioni della squadra in una partita esistente")
     @ApiResponses(value = {

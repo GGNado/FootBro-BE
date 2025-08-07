@@ -22,4 +22,6 @@ public interface PartitaService {
     Partita iscrivitiPartita(Long idPartita, Long idUtente);
 
     Partita salvaSquadra(Long idPartita, SalvaSquadraRequestDTO salvaSquadraRequestDTO);
+
+    Partita disiscrivitiPartita(Long idPartita, Long idUtente);
 }

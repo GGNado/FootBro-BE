@@ -1,5 +1,6 @@
 package com.giggi.service.impl;
 
+import com.giggi.dto.request.partita.PartitaCreateRequestDTO;
 import com.giggi.dto.request.partita.SalvaSquadraRequestDTO;
 import com.giggi.entity.Campionato;
 import com.giggi.entity.PartecipazionePartita;
@@ -11,11 +12,11 @@ import com.giggi.exception.partita.PartitaErrorException;
 import com.giggi.exception.partita.PartitaNotFoundException;
 import com.giggi.exception.user.UserGiaIscrittoPartitaException;
 import com.giggi.exception.user.UserIllegalIscrizionePartitaException;
+import com.giggi.exception.user.UserNonIscrittoException;
 import com.giggi.exception.user.UserNotFoundException;
 import com.giggi.repository.CampionatoRepository;
 import com.giggi.repository.PartecipazionePartitaRepository;
 import com.giggi.repository.UtenteRepository;
-import com.giggi.service.CampionatoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,6 +128,22 @@ public class PartitaServiceImpl implements PartitaService {
             }
         }
 
+        return partita;
+    }
+
+    @Override
+    public Partita disiscrivitiPartita(Long idPartita, Long idUtente) {
+        Partita partita = partitaRepository.findById(idPartita)
+                .orElseThrow(() -> new PartitaNotFoundException("Partita non trovata con id: " + idPartita));
+
+        Utente utente = utenteRepository.findById(idUtente)
+                .orElseThrow(() -> new UserNotFoundException("Utente non trovato con id: " + idUtente));
+
+        PartecipazionePartita partecipazionePartita = partecipazionePartitaRepository.findByPartitaIdAndUtenteId(idPartita, idUtente)
+                .orElseThrow(() -> new UserNonIscrittoException("Utente non iscritto a questa partita"));
+
+
+        partecipazionePartitaRepository.delete(partecipazionePartita);
         return partita;
     }
 }
