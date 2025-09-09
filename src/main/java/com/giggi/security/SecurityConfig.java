@@ -57,6 +57,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:4200",
+                "http://localhost:62492",
                 "https://yourdomain.com"
         ));
 
