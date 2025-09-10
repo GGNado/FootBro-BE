@@ -1,0 +1,28 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main   # o il branch che usi per deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Deploy to VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no root@91.98.85.127 "
+            cd /root/footbro || git clone git@github.com:GGNado/FootBro-BE.git footbro && cd footbro &&
+            git pull &&
+            ./mvnw clean package -DskipTests &&
+            docker compose up -d --build
+          "
