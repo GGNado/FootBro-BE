@@ -1,4 +1,4 @@
-name: Deploy to VPS Part 4
+name: Deploy to VPS Part 5
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh -o StrictHostKeyChecking=no root@91.98.85.127 "
-            cd /root/footbro || git clone git@github.com:GGNado/FootBro-BE.git footbro && cd footbro &&
+            cd /root/footbro || git clone https://github.com/GGNado/FootBro-BE.git footbro && cd footbro &&
             git pull &&
             ./mvnw clean package -DskipTests &&
             docker compose up -d --build
