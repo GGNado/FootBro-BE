@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: footbro-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: footbro_db
+      MYSQL_USER: footbro_user
+      MYSQL_PASSWORD: footbro_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # opzionale per script di inizializzazione
+    networks:
+      - footbro-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+  app:
+    build: .
+    container_name: footbro-app
+    ports:
+      - "8080:8080"  # porta standard Spring Boot
+    environment:
+      # Configurazione database
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/FootBRO
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootroot
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+
+      # Configurazione JPA/Hibernate
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: false
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
+
+      # Configurazione Logging (disabilita i debug in produzione)
+      LOGGING_HIBERNATE_SQL: INFO
+      LOGGING_SPRING_SECURITY: INFO
+      LOGGING_JWT: INFO
+
+      # Profile attivo
+      SPRING_PROFILES_ACTIVE: production
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - footbro-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  footbro-network:
+    driver: bridge
