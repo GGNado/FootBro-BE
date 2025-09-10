@@ -1,4 +1,4 @@
-name: Deploy to VPS Part 3
+name: Deploy to VPS Part 4
 
 on:
   push:
