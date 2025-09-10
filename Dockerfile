@@ -1,5 +1,5 @@
 # Usa Java 21 (più stabile) - cambia con openjdk:24-ea-jdk-slim se hai problemi
-FROM openjdk:21-jdk-slim
+FROM openjdk:24-ea-jdk-slim
 
 # Directory di lavoro nel container
 WORKDIR /app
