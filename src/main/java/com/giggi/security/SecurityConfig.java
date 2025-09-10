@@ -58,6 +58,7 @@ public class SecurityConfig {
                 "http://localhost:3000",
                 "http://localhost:4200",
                 "http://localhost:62492",
+                "http://localhost:53537",
                 "https://yourdomain.com"
         ));
 
