@@ -47,7 +47,7 @@ public class Swagger {
                                 .license(new License().name("Copiright (C) 2025 BASESETUP"))
                 )
                 .servers(List.of(
-                        new Server().url("http://localhost:8080").description("Production Server"),
+                        new Server().url("http://91.98.85.127:8080").description("Production Server"),
                         new Server().url("http://localhost:8080").description("Development Server")
                 ));
     }
