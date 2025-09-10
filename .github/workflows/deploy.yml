@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '24'
-          distribution: 'zulu'   # meglio usare Azul Zulu, che supporta subito le versioni nuove
+          distribution: 'zulu'   # Eclipse Temurin è più stabile per produzione
 
       - name: Build with Maven
         run: ./mvnw clean package -DskipTests
@@ -28,7 +28,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: root
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "target/*.jar,docker-compose.yml,backend/Dockerfile"
+          source: "target/*.jar,docker-compose.yml,Dockerfile"
           target: "/root/footbro"
 
       - name: Deploy on VPS
