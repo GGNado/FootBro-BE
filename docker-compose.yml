@@ -27,9 +27,9 @@ services:
       - "8080:8080"  # porta standard Spring Boot
     environment:
       # Configurazione database
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/FootBRO
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootroot
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/footbro_db
+      SPRING_DATASOURCE_USERNAME: footbro_user
+      SPRING_DATASOURCE_PASSWORD: footbro_password
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
 
       # Configurazione JPA/Hibernate
