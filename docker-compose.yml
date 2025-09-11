@@ -1,4 +1,4 @@
-name: Deploy Backend Only  Test
+name: Deploy Backend Only
 
 on:
   push:
@@ -49,13 +49,12 @@ jobs:
             docker stop footbro-app 2>/dev/null || true
             docker rm -f footbro-app 2>/dev/null || true
             
-            # Alternative: force stop via compose
+            # Force stop via compose and remove orphans
             cd /root/footbro
-            docker compose stop app 2>/dev/null || true
-            docker compose rm -f app 2>/dev/null || true
+            docker compose down --remove-orphans
             
             # Start only app service (nome corretto!)
-            docker compose up -d --no-deps app
+            docker compose up -d app
             
             # Cleanup
             rm -f /tmp/backend.tar.gz
