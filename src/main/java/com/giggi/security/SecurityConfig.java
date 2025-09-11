@@ -54,14 +54,14 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Allow specific origins (update for production)
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "http://localhost:4200",
-                "http://91.98.85.127:80",
-                "http://91.98.85.127",
-                "http://localhost:53537",
-                "https://yourdomain.com"
-        ));
+//        configuration.setAllowedOrigins(Arrays.asList(
+//                "http://localhost:3000",
+//                "http://localhost:4200",
+//                "http://91.98.85.127:80",
+//                "http://91.98.85.127",
+//                "http://localhost:53537",
+//                "https://yourdomain.com"
+//        ));
 
         // Allow specific HTTP methods
         configuration.setAllowedMethods(Arrays.asList(
@@ -78,6 +78,9 @@ public class SecurityConfig {
         configuration.setExposedHeaders(Arrays.asList(
                 "Authorization", "X-Total-Count"
         ));
+
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
