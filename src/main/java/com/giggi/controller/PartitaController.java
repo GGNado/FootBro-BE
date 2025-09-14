@@ -1,5 +1,6 @@
 package com.giggi.controller;
 
+import com.giggi.dto.request.partita.PartitaCompletataRequestDTO;
 import com.giggi.dto.request.partita.PartitaCreateRequestDTO;
 import com.giggi.dto.request.partita.SalvaSquadraRequestDTO;
 import com.giggi.dto.response.Partita.PartitaFindAllDTO;
@@ -182,6 +183,16 @@ public class PartitaController {
                 )
         );
     }
+
+    @PutMapping("/termina")
+    public ResponseEntity<?> terminaPartita(
+            @RequestBody PartitaCompletataRequestDTO partitaCompletataRequestDTO
+    ){
+        partitaService.terminaPartita(partitaCompletataRequestDTO);
+
+        return ResponseEntity.ok().build();
+    }
+
 
 
 }

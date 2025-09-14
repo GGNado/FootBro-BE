@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RepositoryRestResource(exported = false)
 public interface PartecipazioneCampionatoRepository extends JpaRepository<PartecipazioneCampionato, Long> {
@@ -18,4 +20,7 @@ public interface PartecipazioneCampionatoRepository extends JpaRepository<Partec
             "FROM PartecipazioneCampionato p " +
             "WHERE p.utente.id = :utenteId AND p.attivo = true")
     QuickStatsResponseDTO getQuickStatsByUtenteId(@Param("utenteId") Long utenteId);
+
+    Optional<PartecipazioneCampionato> findByUtenteIdAndCampionatoId(Long utenteId, Long campionatoId);
+
 }

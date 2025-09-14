@@ -44,7 +44,7 @@ public class PartecipazionePartita {
 
     @Column(nullable = false)
     @Builder.Default
-    private Double voto = 0.0;
+    private Double voto = 6.0;
 
     @Column
     @Builder.Default
