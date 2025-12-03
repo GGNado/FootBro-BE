@@ -45,13 +45,22 @@ jobs:
             # Load new image
             cd /tmp && docker load < backend.tar.gz
             
-            # Stop and remove old backend container
-            docker stop footbro-backend 2>/dev/null || true
-            docker rm footbro-backend 2>/dev/null || true
+            # Stop and remove old app container (nome corretto!)
+            docker stop footbro-app 2>/dev/null || true
+            docker rm -f footbro-app 2>/dev/null || true
             
-            # Start only backend service
+            # Force stop via compose and remove orphans
             cd /root/footbro
-            docker compose up -d --no-deps backend
+            docker compose down --remove-orphans
+
+            # Start only app service (nome corretto!)
+            docker compose up -d app
             
             # Cleanup
             rm -f /tmp/backend.tar.gz
+
+            # Debug info
+            echo "=== Container Status ==="
+            docker compose ps
+            echo "=== App Logs (last 10 lines) ==="
+            docker compose logs --tail 10 app
