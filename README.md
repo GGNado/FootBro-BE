@@ -2,58 +2,33 @@
 
 **Versione:** 1.0.0-SNAPSHOT  
 **Data di Generazione:** 03 Dicembre 2024  
-**Autore:** Jules (AI Assistant) per il team di sviluppo FootBro  
-**Repository:** https://github.com/giggi/Footbro-BE (fittizio)
+**Autore:** Jules (AI Assistant) & Luigi  
+**Repository:** [https://github.com/giggi/Footbro-BE](https://github.com/GGNado/FootBro-BE)
 
 ---
 
 ## 📋 Indice dei Contenuti
 
 1. [Introduzione](#introduzione)
-    - [Scopo del Progetto](#scopo-del-progetto)
-    - [Contesto Applicativo](#contesto-applicativo)
-    - [Visione Generale](#visione-generale)
 2. [Stack Tecnologico e Requisiti](#stack-tecnologico-e-requisiti)
-    - [Core Frameworks](#core-frameworks)
-    - [Database & Persistenza](#database--persistenza)
-    - [Sicurezza](#sicurezza)
-    - [Strumenti di Sviluppo](#strumenti-di-sviluppo)
-    - [Requisiti di Sistema](#requisiti-di-sistema)
 3. [Architettura del Sistema](#architettura-del-sistema)
-    - [Overview dell'Architettura a Livelli](#overview-dellarchitettura-a-livelli)
-    - [Diagramma Concettuale del Flusso Dati](#diagramma-concettuale-del-flusso-dati)
-    - [Descrizione dei Componenti Architetturali](#descrizione-dei-componenti-architetturali)
-    - [Gestione delle Eccezioni](#gestione-delle-eccezioni)
 4. [Design del Database (Schema ER)](#design-del-database-schema-er)
-    - [Tabelle Principali](#tabelle-principali)
-    - [Relazioni tra Entità](#relazioni-tra-entità)
-    - [Descrizione Dettagliata Campi](#descrizione-dettagliata-campi)
-5. [Guida all'Implementazione (Codebase Reference)](#guida-allimplementazione-codebase-reference)
-    - [Package: Controller](#package-controller)
-    - [Package: Service](#package-service)
-    - [Package: Repository](#package-repository)
-    - [Package: DTO](#package-dto)
-    - [Package: Entity](#package-entity)
-    - [Package: Mapper](#package-mapper)
-    - [Package: Security](#package-security)
-6. [Riferimento API (API Reference)](#riferimento-api-api-reference)
-    - [Autenticazione (Auth)](#autenticazione-auth)
-    - [Campionati](#campionati)
-    - [Partite](#partite)
-    - [Utenti](#utenti)
-7. [Logiche di Business Complesse](#logiche-di-business-complesse)
-    - [Algoritmo di Calcolo Classifica](#algoritmo-di-calcolo-classifica)
-    - [Gestione Stati Partita](#gestione-stati-partita)
-    - [Flusso di Iscrizione e Codici Invito](#flusso-di-iscrizione-e-codici-invito)
-8. [Configurazione e Setup](#configurazione-e-setup)
-    - [Proprietà dell'Applicazione (`application.properties`)](#proprietà-dellapplicazione-applicationproperties)
-    - [Configurazione Build (`pom.xml`)](#configurazione-build-pomxml)
-    - [Installazione Locale](#installazione-locale)
-    - [Esecuzione tramite Docker](#esecuzione-tramite-docker)
-9. [Deployment e CI/CD](#deployment-e-cicd)
-    - [Workflow GitHub Actions](#workflow-github-actions)
-    - [Strategia di Deploy su VPS](#strategia-di-deploy-su-vps)
-10. [Troubleshooting e FAQ](#troubleshooting-e-faq)
+5. [Sicurezza e Autenticazione (Deep Dive)](#sicurezza-e-autenticazione-deep-dive)
+    - [Panoramica](#panoramica)
+    - [Flusso JWT](#flusso-jwt)
+    - [Filtri di Sicurezza](#filtri-di-sicurezza)
+    - [Configurazione Password](#configurazione-password)
+    - [CORS](#cors)
+6. [Guida all'Implementazione (Codebase Reference)](#guida-allimplementazione-codebase-reference)
+7. [Riferimento API (API Reference)](#riferimento-api-api-reference)
+    - [Autenticazione (Auth)](#api-autenticazione)
+    - [Campionati](#api-campionati)
+    - [Partite](#api-partite)
+    - [Utenti](#api-utenti)
+8. [Logiche di Business Complesse](#logiche-di-business-complesse)
+9. [Configurazione e Setup](#configurazione-e-setup)
+10. [Deployment e CI/CD](#deployment-e-cicd)
+11. [Troubleshooting e FAQ](#troubleshooting-e-faq)
 
 ---
 
@@ -80,7 +55,6 @@ Il sistema è costruito come un monolito modulare basato su **Spring Boot**, esp
 Il cuore dell'applicazione è basato sull'ecosistema Spring, scelto per la sua maturità, il supporto alla Dependency Injection e la vasta gamma di moduli integrati.
 
 *   **Java Development Kit (JDK):** Versione 21 (LTS). Il progetto sfrutta le feature moderne del linguaggio come i Records (nei DTO), Pattern Matching e la nuova API Date/Time.
-    *   *Nota sulla versione:* Sebbene il `pom.xml` originale puntasse a Java 24, per compatibilità con gli ambienti di produzione attuali si è standardizzato su Java 21.
 *   **Spring Boot 3.5.4:** Framework opinionated che semplifica la configurazione e il bootstrap dell'applicazione. Include Tomcat come web server embedded.
 *   **Spring Web MVC:** Modulo per la creazione di applicazioni web basate su Servlet, utilizzato per implementare i Controller REST.
 *   **Spring Data JPA:** Astrazione sopra JPA (Java Persistence API) che riduce drasticamente il codice boilerplate necessario per l'accesso ai dati, fornendo repository automatici.
@@ -91,22 +65,11 @@ Il cuore dell'applicazione è basato sull'ecosistema Spring, scelto per la sua m
 *   **MySQL Connector/J:** Driver JDBC per la connessione.
 *   **HikariCP:** Connection pool ad alte prestazioni (default in Spring Boot 2+).
 
-### <a name="sicurezza"></a>Sicurezza
-*   **Spring Security 6:** Framework potente e altamente personalizzabile per l'autenticazione e il controllo degli accessi.
-*   **JWT (JSON Web Token):** Standard per l'autenticazione stateless. Utilizziamo la libreria `jjwt` (versione 0.12.2) per la generazione, il parsing e la validazione dei token.
-*   **BCrypt:** Algoritmo di hashing adattivo utilizzato per cifrare le password degli utenti nel database. Implementato tramite la libreria `at.favre.lib:bcrypt`.
-
 ### <a name="strumenti-di-sviluppo"></a>Strumenti di Sviluppo
 *   **Maven:** Strumento di build automation e gestione delle dipendenze.
 *   **Lombok:** Libreria che si aggancia al compilatore per generare automaticamente getter, setter, costruttori e builder, riducendo la verbosità del codice Java.
 *   **MapStruct:** Processore di annotazioni per la generazione di mapper type-safe ed efficienti tra Entity e DTO.
 *   **SpringDoc OpenAPI (Swagger UI):** Generazione automatica della documentazione API e interfaccia di test interattiva.
-
-### <a name="requisiti-di-sistema"></a>Requisiti di Sistema
-Per eseguire l'applicazione in ambiente di sviluppo o produzione:
-*   **RAM:** Minimo 512MB, Consigliato 2GB.
-*   **Disk Space:** 500MB per l'applicazione e i log + Spazio Database.
-*   **OS:** Linux (Ubuntu/Debian raccomandati), Windows, macOS.
 
 ---
 
@@ -121,37 +84,6 @@ Gli strati principali sono:
 3.  **Persistence Layer (Repository):** Interfaccia con il database. Estende `JpaRepository` per fornire metodi CRUD standard e query custom (JPQL o Native SQL).
 4.  **Database Layer:** Il database fisico (MySQL).
 
-### <a name="diagramma-concettuale-del-flusso-dati"></a>Diagramma Concettuale del Flusso Dati
-
-```
-[Client (Web/Mobile)]
-       ⬇️ (HTTP Request JSON)
-[Security Filter Chain (JWT Auth)]
-       ⬇️ (Authenticated Request)
-[Controller Layer] (es. PartitaController)
-       ⬇️ (DTO Input)
-[Service Layer] (es. PartitaService)
-       ⬇️ (Entity Manipulation & Logic)
-[Repository Layer] (es. PartitaRepository)
-       ⬇️ (SQL Query)
-[Database (MySQL)]
-```
-
-### <a name="descrizione-dei-componenti-architetturali"></a>Descrizione dei Componenti Architetturali
-
-#### 1. DTO (Data Transfer Objects)
-Gli oggetti DTO sono POJO (Plain Old Java Objects) puri utilizzati esclusivamente per trasportare dati.
-*   **Request DTOs:** (es. `LoginRequest`, `CampionatoCreateRequestDTO`) contengono i dati inviati dal client. Sono annotati con `jakarta.validation` (`@NotNull`, `@Size`, ecc.) per garantire la validità dei dati in ingresso prima ancora che arrivino al Service.
-*   **Response DTOs:** (es. `JwtResponse`, `PartitaFindDTO`) definiscono esattamente cosa viene restituito al client, nascondendo campi sensibili (come password) o dettagli implementativi interni delle Entity (come le foreign key grezze).
-
-#### 2. Mapper (MapStruct)
-Per evitare codice ripetitivo di conversione "Entity <-> DTO", utilizziamo MapStruct. Le interfacce Mapper definiscono le conversioni e MapStruct genera l'implementazione concreta durante la compilazione. Questo approccio è molto più performante della reflection a runtime.
-
-#### 3. Exception Handling Centralizzato
-Il sistema utilizza un `@ControllerAdvice` globale (`GlobalExceptionHandler`) per intercettare le eccezioni lanciate in qualsiasi punto dell'applicazione.
-*   Se un Service lancia `CampionatoNotFoundException`, il `GlobalExceptionHandler` la cattura e restituisce una risposta JSON standardizzata con status HTTP 404 e un messaggio chiaro.
-*   Questo evita blocchi `try-catch` ripetuti in ogni Controller.
-
 ---
 
 ## <a name="design-del-database-schema-er"></a>4. Design del Database (Schema ER)
@@ -163,10 +95,10 @@ Il database è normalizzato per garantire l'integrità dei dati. Di seguito l'an
 #### `utenti` (Users)
 Rappresenta gli utenti registrati alla piattaforma.
 *   `id` (PK): BigInt, Auto Increment.
-*   `username`: Varchar(50), Unique. Identificativo di login.
-*   `email`: Varchar(100), Unique. Per comunicazioni e recupero password.
-*   `password`: Varchar(120). Hash BCrypt della password.
-*   `first_name`, `last_name`: Varchar(100). Dati anagrafici.
+*   `username`: Varchar(50), Unique.
+*   `email`: Varchar(100), Unique.
+*   `password`: Varchar(120). Hash BCrypt.
+*   `first_name`, `last_name`: Varchar(100).
 *   `ruoli_preferiti`: Tabella collegata per memorizzare le preferenze di gioco (Portiere, Difensore, ecc.).
 
 #### `roles` (Ruoli di Sistema)
@@ -177,49 +109,86 @@ Definisce i permessi a livello di piattaforma (non di gioco).
 #### `campionati` (Championships)
 Rappresenta una lega o un torneo creato da un utente.
 *   `id` (PK): BigInt.
-*   `nome`: Varchar, Unique. Il nome della lega.
-*   `codice`: Varchar(8), Unique. Codice alfanumerico generato randomicamente per gli inviti.
-*   `creatore_id` (FK -> utenti): Chi ha creato il campionato.
+*   `nome`: Varchar, Unique.
+*   `codice`: Varchar(8), Unique. Codice invito.
+*   `creatore_id` (FK -> utenti).
 *   `tipologia_campionato`: Enum (`CALCIO_A_5`, `CALCIO_A_7`, `CALCIO_A_11`).
 
 #### `partite` (Matches)
 Singolo evento sportivo all'interno di un campionato.
 *   `id` (PK): BigInt.
 *   `campionato_id` (FK -> campionati).
-*   `data_ora`: Datetime. Quando si gioca.
-*   `luogo`: Varchar. Indirizzo o nome del campo.
+*   `data_ora`: Datetime.
+*   `luogo`: Varchar.
 *   `stato`: Enum (`PROGRAMMATA`, `TERMINATA`, `ANNULLATA`).
-*   `gol_squadra_a`, `gol_squadra_b`: Integer. Risultato finale.
+*   `gol_squadra_a`, `gol_squadra_b`: Integer.
 
 #### `partecipazione_campionato` (Join Table Estesa)
-Collega Utenti a Campionati, ma contiene anche le statistiche globali del giocatore in quel campionato.
-*   `id` (PK).
-*   `utente_id` (FK).
-*   `campionato_id` (FK).
-*   `punti`: Integer. Totale punti in classifica.
+Collega Utenti a Campionati e contiene stats globali.
+*   `punti`: Integer.
 *   `gol_fatti`: Integer.
-*   `assist`: Integer.
 *   `media_voto`: Double.
-*   `attivo`: Boolean. Se l'utente è ancora parte del campionato.
+*   `attivo`: Boolean.
 
 #### `partecipazione_partita` (Join Table Estesa)
-Collega Utenti a Partite, rappresentando la presenza del giocatore in un match specifico e la sua performance.
-*   `id` (PK).
-*   `utente_id` (FK).
-*   `partita_id` (FK).
+Collega Utenti a Partite e contiene stats del singolo match.
 *   `squadra`: Enum (`A`, `B`, `DA_ASSEGNARE`).
-*   `gol_segnati`: Integer. Gol in quella specifica partita.
-*   `voto`: Double. Voto in pagella.
-
-### <a name="relazioni-tra-entità"></a>Relazioni tra Entità
-*   **Utente 1:N Campionati (Creati):** Un utente può creare infiniti campionati.
-*   **Utente M:N Campionati (Partecipazione):** Gestito tramite `PartecipazioneCampionato`.
-*   **Campionato 1:N Partite:** Un campionato contiene molte partite.
-*   **Partita M:N Utenti:** Gestito tramite `PartecipazionePartita`.
+*   `gol_segnati`: Integer.
+*   `voto`: Double.
 
 ---
 
-## <a name="guida-allimplementazione-codebase-reference"></a>5. Guida all'Implementazione (Codebase Reference)
+## <a name="sicurezza-e-autenticazione-deep-dive"></a>5. Sicurezza e Autenticazione (Deep Dive)
+
+La sicurezza è un componente critico di FootBro-BE. Il sistema utilizza un approccio **stateless** basato su standard industriali per garantire che ogni richiesta sia autenticata e autorizzata correttamente.
+
+### <a name="panoramica"></a>Panoramica
+L'implementazione si trova nel package `com.giggi.security` e utilizza **Spring Security 6**.
+- **Autenticazione:** Verifica *chi* è l'utente (Login).
+- **Autorizzazione:** Verifica *cosa* può fare l'utente (Ruoli).
+
+### <a name="flusso-jwt"></a>Flusso JWT (JSON Web Token)
+Il cuore dell'autenticazione è il token JWT. Ecco come funziona il ciclo di vita:
+
+1.  **Generazione (`JwtUtils.generateJwtToken`)**:
+    Quando un utente effettua il login con successo, il server genera un token firmato digitalmente usando l'algoritmo **HMAC SHA-256** (HS256).
+    Il token contiene un **Payload** (Claims) con:
+    - `sub` (Subject): Lo username.
+    - `id`: L'ID utente nel database.
+    - `email`, `firstName`, `lastName`: Dati anagrafici per evitare query ridondanti lato frontend.
+    - `authorities`: La lista dei ruoli (es. `ROLE_USER`).
+    - `iat` (Issued At): Data di creazione.
+    - `exp` (Expiration): Data di scadenza (configurata a 24 ore).
+
+2.  **Validazione (`JwtUtils.validateJwtToken`)**:
+    Ad ogni richiesta successiva, il token viene analizzato. La firma viene ricalcolata usando il segreto (`app.jwtSecret`). Se la firma non corrisponde (token manomesso) o se il token è scaduto (`ExpiredJwtException`), la richiesta viene rifiutata.
+
+### <a name="filtri-di-sicurezza"></a>Filtri di Sicurezza
+La protezione delle API avviene tramite una catena di filtri (`SecurityFilterChain`).
+Il componente chiave è `AuthTokenFilter` (estende `OncePerRequestFilter`), che intercetta ogni richiesta HTTP **prima** che raggiunga i Controller.
+
+**Logica del Filtro:**
+1.  Estrae l'header HTTP `Authorization`.
+2.  Controlla se inizia con `Bearer `.
+3.  Estrae la stringa del token.
+4.  Chiama `jwtUtils.validateJwtToken(token)`.
+5.  Se valido, estrae lo username e i ruoli.
+6.  Costruisce un oggetto `UsernamePasswordAuthenticationToken`.
+7.  Lo inserisce nel `SecurityContextHolder` di Spring.
+    *Da questo momento, Spring considera l'utente autenticato per il thread corrente.*
+
+### <a name="configurazione-password"></a>Configurazione Password
+Le password non sono **mai** salvate in chiaro.
+Viene utilizzato il bean `PasswordEncoder` implementato con **BCrypt**.
+- **Registrazione:** `passwordEncoder.encode("password123")` -> Hash nel DB.
+- **Login:** `passwordEncoder.matches("password123", hashDalDb)` -> Verifica.
+
+### <a name="cors"></a>CORS (Cross-Origin Resource Sharing)
+Per permettere al frontend (che potrebbe girare su `localhost:3000` o `localhost:4200`) di chiamare il backend (`localhost:8080`), è configurato un bean `CorsConfigurationSource` che abilita esplicitamente le origini fidate e i metodi HTTP (GET, POST, PUT, DELETE, OPTIONS).
+
+---
+
+## <a name="guida-allimplementazione-codebase-reference"></a>6. Guida all'Implementazione (Codebase Reference)
 
 Questa sezione esplora il codice sorgente nel dettaglio.
 
@@ -273,106 +242,275 @@ Interfacce che estendono `JpaRepository<Entity, ID>`.
 
 ---
 
-## <a name="riferimento-api-api-reference"></a>6. Riferimento API (API Reference)
+## <a name="riferimento-api-api-reference"></a>7. Riferimento API (API Reference)
 
-Tutte le API sono prefissate con `/api`. Le risposte sono in formato JSON.
+Di seguito la documentazione esaustiva di tutti gli endpoint disponibili.
 
-### <a name="autenticazione-auth"></a>Autenticazione (Auth)
+### <a name="api-autenticazione"></a>🔐 Autenticazione (Auth)
 
-#### `POST /api/auth/signin`
-Effettua il login.
-**Body:**
-```json
-{
-  "usernameOrEmail": "mario.rossi",
-  "password": "password123"
-}
-```
-**Risposta (200 OK):**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiJ9...",
-  "type": "Bearer",
-  "id": 1,
-  "username": "mario.rossi",
-  "roles": ["ROLE_USER"]
-}
-```
+Base URL: `/api/auth`
 
-#### `POST /api/auth/signup`
-Registrazione nuovo utente.
-**Body:**
-```json
-{
-  "username": "mario.rossi",
-  "email": "mario@email.com",
-  "password": "password123",
-  "firstName": "Mario",
-  "lastName": "Rossi"
-}
-```
+#### 1. Registrazione Utente
+Crea un nuovo account nel sistema.
+*   **Method:** `POST`
+*   **URL:** `/signup`
+*   **Request Body (JSON):**
+    ```json
+    {
+      "username": "mario.rossi",      // Obbligatorio, min 3 char
+      "email": "mario@test.com",      // Obbligatorio, formato email valido
+      "password": "Password123!",     // Obbligatorio, min 6 char
+      "firstName": "Mario",           // Obbligatorio
+      "lastName": "Rossi",            // Obbligatorio
+      "roles": ["user"],              // Opzionale, default "user"
+      "ruoliPreferiti": ["PORTIERE"]  // Opzionale. Enum: PORTIERE, DIFENSORE, CENTROCAMPISTA, ATTACCANTE
+    }
+    ```
+*   **Response Body (JSON - 200 OK):**
+    ```json
+    {
+      "message": "User registered successfully!",
+      "success": true
+    }
+    ```
+*   **Errori Comuni:** `400 Bad Request` (Username/Email già esistenti).
 
-### <a name="campionati"></a>Campionati
+#### 2. Login
+Autentica l'utente e restituisce il token JWT.
+*   **Method:** `POST`
+*   **URL:** `/signin`
+*   **Request Body (JSON):**
+    ```json
+    {
+      "usernameOrEmail": "mario.rossi", // Username o Email
+      "password": "Password123!"
+    }
+    ```
+*   **Response Body (JSON - 200 OK):**
+    ```json
+    {
+      "token": "eyJhbGciOiJIUzI1NiJ9...", // JWT Token completo
+      "type": "Bearer",
+      "id": 1,
+      "username": "mario.rossi",
+      "email": "mario@test.com",
+      "firstName": "Mario",
+      "lastName": "Rossi",
+      "roles": ["ROLE_USER"],
+      "expiresIn": 86400000
+    }
+    ```
 
-#### `GET /api/campionati/iscritto/{idUtente}`
-Ottieni i campionati dell'utente.
-**Header:** `Authorization: Bearer <token>`
-
-#### `POST /api/campionati`
-Crea nuovo campionato.
-**Body:**
-```json
-{
-  "nome": "Torneo Estivo 2024",
-  "descrizione": "Calcetto tra amici",
-  "tipologia": "CALCIO_A_5",
-  "idUtente": 1
-}
-```
-
-#### `POST /api/campionati/join`
-Unisciti a un campionato.
-**Body:**
-```json
-{
-  "codice": "A1B2C3D4",
-  "idUtente": 1
-}
-```
-
-### <a name="partite"></a>Partite
-
-#### `POST /api/partite/campionato/{idCampionato}`
-Crea partita.
-**Body:**
-```json
-{
-  "dataOra": "2024-06-15T20:00:00",
-  "luogo": "Campo Sportivo Comunale"
-}
-```
-
-#### `POST /api/partite/{idPartita}/iscriviti/{idUtente}`
-Iscrizione giocatore alla partita. Nessun body richiesto.
-
-#### `PUT /api/partite/termina`
-Chiude la partita e aggiorna le stats.
-**Body:**
-```json
-{
-  "id": 10,
-  "golSquadraA": 5,
-  "golSquadraB": 3,
-  "partecipazioni": [
-    { "utente": {"id": 1}, "golSegnati": 2, "assist": 1, "voto": 7.5, "squadra": "A" },
-    { "utente": {"id": 2}, "golSegnati": 0, "assist": 0, "voto": 6.0, "squadra": "B" }
-  ]
-}
-```
+#### 3. Validazione Token
+Verifica se un token salvato è ancora valido (utile per l'auto-login frontend).
+*   **Method:** `POST`
+*   **URL:** `/validate`
+*   **Headers:** `Authorization: Bearer <token>`
+*   **Response Body (JSON - 200 OK):**
+    ```json
+    {
+      "message": "Token valido",
+      "success": true
+    }
+    ```
 
 ---
 
-## <a name="logiche-di-business-complesse"></a>7. Logiche di Business Complesse
+### <a name="api-campionati"></a>🏆 Campionati
+
+Base URL: `/api/campionati`
+*Richiedono Header `Authorization: Bearer <token>`*
+
+#### 1. Crea Campionato
+*   **Method:** `POST`
+*   **URL:** `/`
+*   **Request Body (JSON):**
+    ```json
+    {
+      "nome": "Torneo Aziendale 2024",
+      "descrizione": "Torneo di calcetto post-lavoro",
+      "idUtente": 1,                    // ID del creatore
+      "tipologiaCampionato": "CALCIO_A_5" // Enum: CALCIO_A_5, CALCIO_A_7, CALCIO_A_11
+    }
+    ```
+*   **Response Body (JSON - 200 OK):**
+    ```json
+    {
+      "id": 10,
+      "nome": "Torneo Aziendale 2024",
+      "descrizione": "Torneo di calcetto post-lavoro",
+      "codice": "A1B2C3D4",            // Codice generato per inviti
+      "tipologiaCampionato": "CALCIO_A_5",
+      "numeroPartecipanti": 1
+    }
+    ```
+
+#### 2. Unisciti a Campionato (Join)
+*   **Method:** `POST`
+*   **URL:** `/join`
+*   **Request Body (JSON):**
+    ```json
+    {
+      "codice": "A1B2C3D4",  // Codice fornito dall'amministratore
+      "idUtente": 2          // ID dell'utente che vuole unirsi
+    }
+    ```
+*   **Response Body (JSON):** Stesso oggetto `CampionatoFindDTO` della creazione.
+
+#### 3. Ottieni Campionati Utente
+*   **Method:** `GET`
+*   **URL:** `/iscritto/{idUtente}`
+*   **Response Body (JSON - Lista):**
+    ```json
+    {
+      "campionati": [
+        {
+          "id": 10,
+          "nome": "Torneo Aziendale 2024",
+          "codice": "A1B2C3D4",
+          "tipologiaCampionato": "CALCIO_A_5",
+          "numeroPartecipanti": 5
+        }
+      ]
+    }
+    ```
+
+#### 4. Ottieni Classifica
+*   **Method:** `GET`
+*   **URL:** `/{idCampionato}/classifica`
+*   **Response Body (JSON):**
+    ```json
+    {
+      "classifica": [
+        {
+          "utente": {
+            "id": 1,
+            "username": "mario.rossi",
+            "firstName": "Mario",
+            "lastName": "Rossi"
+          },
+          "punti": 15,
+          "partiteGiocate": 5,
+          "partiteVinte": 5,
+          "partitePareggiate": 0,
+          "partitePerse": 0,
+          "golFatti": 12,
+          "golSubiti": 3,
+          "assist": 5,
+          "mediaVoto": 7.5
+        }
+        // ... altri utenti ordinati per punti
+      ]
+    }
+    ```
+
+---
+
+### <a name="api-partite"></a>⚽ Partite
+
+Base URL: `/api/partite`
+*Richiedono Header `Authorization: Bearer <token>`*
+
+#### 1. Crea Partita
+*   **Method:** `POST`
+*   **URL:** `/campionato/{idCampionato}`
+*   **Request Body (JSON):**
+    ```json
+    {
+      "dataOra": "2024-10-15T20:30:00",
+      "luogo": "Centro Sportivo 'La Pinetina'"
+    }
+    ```
+*   **Response Body (JSON):**
+    ```json
+    {
+      "id": 55,
+      "dataOra": "2024-10-15T20:30:00",
+      "luogo": "Centro Sportivo 'La Pinetina'",
+      "stato": "PROGRAMMATA",
+      "golSquadraA": 0,
+      "golSquadraB": 0
+    }
+    ```
+
+#### 2. Iscriviti a Partita
+*   **Method:** `POST`
+*   **URL:** `/{idPartita}/iscriviti/{idUtente}`
+*   **Request Body:** Vuoto.
+*   **Response:** Restituisce l'oggetto Partita aggiornato con la lista dei partecipanti.
+
+#### 3. Disiscriviti da Partita
+*   **Method:** `POST`
+*   **URL:** `/{idPartita}/disiscriviti/{idUtente}`
+*   **Response:** Oggetto Partita aggiornato.
+
+#### 4. Salva Squadre (Admin)
+Assegna i giocatori iscritti alla Squadra A o B.
+*   **Method:** `POST`
+*   **URL:** `/{idPartita}/salvaSquadra`
+*   **Request Body (JSON):**
+    ```json
+    {
+      "idUtenti": [1, 2, 3],  // Lista ID utenti da spostare
+      "squadra": "A"          // Destinazione: "A" o "B"
+    }
+    ```
+
+#### 5. Termina Partita e Salva Voti
+Chiude il match e calcola le statistiche.
+*   **Method:** `PUT`
+*   **URL:** `/termina`
+*   **Request Body (JSON):**
+    ```json
+    {
+      "id": 55,
+      "golSquadraA": 5,
+      "golSquadraB": 4,
+      "luogo": "Centro Sportivo (Aggiornato)",
+      "dataOra": "2024-10-15T20:30:00",
+      "partecipazioni": [
+        {
+          "utente": { "id": 1 },
+          "golSegnati": 3,
+          "assist": 1,
+          "voto": 8.0,
+          "squadra": "A"
+        },
+        {
+          "utente": { "id": 2 },
+          "golSegnati": 2,
+          "assist": 0,
+          "voto": 7.0,
+          "squadra": "B"
+        }
+        // ... lista completa partecipanti
+      ]
+    }
+    ```
+
+---
+
+### <a name="api-utenti"></a>👤 Utenti
+
+Base URL: `/api/utenti`
+
+#### 1. Statistiche Rapide (QuickStats)
+Restituisce un riassunto delle performance dell'utente.
+*   **Method:** `GET`
+*   **URL:** `/{idUtente}/quickStats`
+*   **Response Body (JSON):**
+    ```json
+    {
+      "totalePartiteGiocate": 25,
+      "totaleGolFatti": 10,
+      "mediaVotoGenerale": 6.8,
+      "percentualeVittorie": 60.5
+    }
+    ```
+
+---
+
+## <a name="logiche-di-business-complesse"></a>8. Logiche di Business Complesse
 
 ### <a name="algoritmo-di-calcolo-classifica"></a>Algoritmo di Calcolo Classifica
 La classifica non è una semplice "vista" sul database, ma il risultato di un accumulo persistente di dati nella tabella `PartecipazioneCampionato`.
@@ -391,7 +529,7 @@ Il codice invito è generato tramite `UUID.randomUUID()`, pulito dai trattini, p
 
 ---
 
-## <a name="configurazione-e-setup"></a>8. Configurazione e Setup
+## <a name="configurazione-e-setup"></a>9. Configurazione e Setup
 
 ### <a name="proprietà-dellapplicazione-applicationproperties"></a>Proprietà dell'Applicazione (`application.properties`)
 File cruciale situato in `src/main/resources`.
@@ -432,7 +570,7 @@ Il progetto include un `Dockerfile` multistage ottimizzato.
 
 ---
 
-## <a name="deployment-e-cicd"></a>9. Deployment e CI/CD
+## <a name="deployment-e-cicd"></a>10. Deployment e CI/CD
 
 ### <a name="workflow-github-actions"></a>Workflow GitHub Actions
 File: `.github/workflows/deploy.yml`
@@ -455,7 +593,7 @@ Sul server di produzione, la struttura consigliata è:
 
 ---
 
-## <a name="troubleshooting-e-faq"></a>10. Troubleshooting e FAQ
+## <a name="troubleshooting-e-faq"></a>11. Troubleshooting e FAQ
 
 ### Errore: `Communications link failure` all'avvio
 **Causa:** L'applicazione non riesce a raggiungere il database MySQL.
@@ -473,4 +611,4 @@ Sul server di produzione, la struttura consigliata è:
 **Soluzione:** Esegui `mvn clean compile`. Assicurati che l'annotation processor di MapStruct sia configurato nel `pom.xml`.
 
 ---
-*Fine della Documentazione Ufficiale - FootBro Development Team*
+*Fine della Documentazione Ufficiale*
