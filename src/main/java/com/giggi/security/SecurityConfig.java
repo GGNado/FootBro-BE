@@ -60,7 +60,8 @@ public class SecurityConfig {
                 "http://91.98.85.127:80",
                 "http://91.98.85.127",
                 "http://localhost:60804",
-                "https://yourdomain.com"
+                "https://yourdomain.com",
+                "*"
         ));
 
         // Allow specific HTTP methods
