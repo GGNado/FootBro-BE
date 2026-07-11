@@ -69,7 +69,6 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = MessageResponse.class)))
     })
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody RegisterRequest signUpRequest) {
-        System.out.println(signUpRequest.toString());
         log.info("Registration attempt for user: {}", signUpRequest.getUsername());
 
         try {
