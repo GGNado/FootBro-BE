@@ -59,7 +59,7 @@ public class SecurityConfig {
                 "http://localhost:4200",
                 "http://91.98.85.127:80",
                 "http://91.98.85.127",
-                "http://localhost:53537",
+                "http://localhost:60804",
                 "https://yourdomain.com"
         ));
 
