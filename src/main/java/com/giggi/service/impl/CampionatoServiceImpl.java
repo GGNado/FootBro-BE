@@ -20,7 +20,7 @@ import com.giggi.repository.CampionatoRepository;
 import com.giggi.service.CampionatoService;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CampionatoServiceImpl implements CampionatoService {
 
@@ -30,6 +30,7 @@ public class CampionatoServiceImpl implements CampionatoService {
     private final PartecipazioneCampionatoMapper partecipazioneCampionatoMapper;
 
     @Override
+    @Transactional
     public Campionato save(CampionatoCreateRequestDTO campionatoCreateRequestDTO) {
         Utente creatore = utenteRepository.findById(campionatoCreateRequestDTO.getIdUtente()).orElseThrow();
         Campionato campionato = campionatoMapper.convert(campionatoCreateRequestDTO);
@@ -43,11 +44,13 @@ public class CampionatoServiceImpl implements CampionatoService {
     }
 
     @Override
+    @Transactional
     public Campionato update(Campionato campionato) {
         return campionatoRepository.save(campionato);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         campionatoRepository.deleteById(id);
     }
@@ -68,6 +71,7 @@ public class CampionatoServiceImpl implements CampionatoService {
     }
 
     @Override
+    @Transactional
     public Campionato joinCampionato(CampionatoJoinRequestDTO campionatoJoinRequestDTO) {
         Campionato campionato = campionatoRepository.findByCodice(campionatoJoinRequestDTO.getCodice()).orElseThrow(
                 () -> new CampionatoNotFoundException("Campionato non trovato con codice: " + campionatoJoinRequestDTO.getCodice())
@@ -77,12 +81,15 @@ public class CampionatoServiceImpl implements CampionatoService {
                 () -> new IllegalArgumentException("Utente non trovato con ID: " + campionatoJoinRequestDTO.getIdUtente())
         );
 
-        if (campionato.getPartecipanti().contains(utente)) {
+        boolean giaIscritto = campionato.getPartecipazioni().stream()
+                .anyMatch(p -> p.getUtente().getId().equals(utente.getId()));
+
+        if (giaIscritto) {
             return campionato;
         }
 
         campionato.aggiungiPartecipante(utente);
-        return campionatoRepository.save(campionato);
+        return campionato;
     }
 
     @Override
