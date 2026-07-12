@@ -55,13 +55,8 @@ public class SecurityConfig {
 
         // Allow specific origins (update for production)
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "http://localhost:4200",
-                "http://91.98.85.127:80",
-                "http://91.98.85.127",
-                "http://localhost:60804",
-                "https://yourdomain.com",
-                "*"
+                "http://192.168.1.36",
+                "https://footbro.casa-torvillo.duckdns.org"
         ));
 
         // Allow specific HTTP methods
